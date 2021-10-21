@@ -16,7 +16,7 @@ const URL = fetch(`http://localhost:3000/ramens`)
 
 function addRamenToMenu (ramen) {
     const newImage = document.createElement("img")
-    newImage.addEventListener("click", ramenClick)
+    newImage.addEventListener("click", () => ramenClick(ramen))
     newImage.src = ramen.image
     ramenMenu.append(newImage);
 }
@@ -25,18 +25,18 @@ function addRamenToMenu (ramen) {
 //   ramen displayed inside the `#ramen-detail` div and where it says
 //   `insert comment here` and `insert rating here`.
 
-function ramenClick(ramen) {
+function ramenClick(event) {
     const ramenDetails = document.getElementById("ramen-detail")
     const ramenImage = ramenDetails.querySelector("img")
-    ramenImage.src = ramen.image
+    ramenImage.src = event.image
     const ramenName = ramenDetails.querySelector("h2")
-    ramenName.textContent = ramen.name
+    ramenName.innerText = event.name
     const ramenRestaurant = ramenDetails.querySelector("h3")
-    ramenRestaurant.textContent = ramen.restaurant 
+    ramenRestaurant.textContent = event.restaurant 
     const ramenRating = document.getElementById("rating-display")
-    ramenRating.textContent = ramen.rating
+    ramenRating.textContent = event.rating
     const ramenComment = document.getElementById("comment-display")
-    ramenRating.textContent = ramen.comment
+    ramenComment.textContent = event.comment
 }
 
 // Create a new ramen after submitting the `new-ramen` form
@@ -45,5 +45,20 @@ function ramenClick(ramen) {
 
 // The new ramen does not need to persist; in other words, if you refresh the page, it's okay that the new ramen is no
 // longer on the page.
+
+const newRamen = document.getElementById("new-ramen")
+
+newRamen.addEventListener("submit", e => {
+    e.preventDefault()
+
+    const newRamenObject = {};
+    newRamen.image = e.target.image.value
+    newRamen.name = e.target.name.value
+    newRamen.restaurant = e.target.restaurant.value
+    newRamen.rating = e.target.rating.value
+    newRamen.comment = e.target["new-comment"].value
+
+    addRamenToMenu(newRamenObject)
+})
 
 
