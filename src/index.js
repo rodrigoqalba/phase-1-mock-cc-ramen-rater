@@ -1,66 +1,49 @@
-// write your code here
-const ramenMenuElement = document.getElementById('ramen-menu')
+// // write your code here
 
-const newRamenForm = document.getElementById('new-ramen')
+// See all ramen images in the `div` with the id of `ramen-menu`
 
-newRamenForm.addEventListener('submit', e => {
-    e.preventDefault()
+const ramenMenu = document.getElementById("ramen-menu")
 
-    //make an object
-    //use renderRamenToMenu with the new object
-    const newRamen = {}
-    newRamen.name = e.target.name.value
-    newRamen.restaurant = e.target.restaurant.value
-    newRamen.image = e.target.image.value
-    newRamen.rating = e.target.rating.value
-    newRamen.comment = e.target["new-comment"].value
-    renderRamenToMenu(newRamen)
+// When the page loads, request the data from the server to get all the ramen objects
 
-})
-
-const ramenClick = (theRamen) => {
-    console.log(theRamen)
-    //grab the ramen detail div
-    const detailElement = document.getElementById('ramen-detail')
-    //add theRamen's attributes to the div
-    // an img that needs the image
-    const img = detailElement.querySelector('img')
-    img.src = theRamen.image
-
-    // an h2 that needs the name 
-    const h2 = detailElement.querySelector('h2')
-    h2.textContent = theRamen.name
-
-    // an h3 that needs the restaurant 
-    const h3 = detailElement.querySelector('h3')
-    h3.textContent = theRamen.restaurant
-
-    document.getElementById('ratin-display').textContent = ramen.rating
-    document.getElementById('comment-display').innerText = ramen.comment
-}
-
-function renderRamenToMenu (ramenObject) {
-    // make an img element 
-    const newImg = document.createElement('img')
-        
-    newImg.addEventListener('click', () => {
-        ramenClick(oneRamen)
-    })
-    
-    //assign the src attribute to each img element 
-    newImg.src = oneRamen.image
-    // append to the ramenMenuElement
-    ramenMenuElement.append(newImg)
-}
-
-const URL = fetch('http://localhost:3000/ramens')
-.then(response => response.json())
+const URL = fetch(`http://localhost:3000/ramens`)
+.then(resp => resp.json())
 .then(ramens => {
-    /*
-        Then display the image for each of the ramen using an 'img' tag
-        inside the '#ramen-menu' div.
-    */
-    ramens.forEach(oneRamen => {
-
-    })
+    ramens.forEach(addRamenToMenu)
 })
+
+// display the image for each of the ramen using an `img` tag inside the `#ramen-menu` div
+
+function addRamenToMenu (ramen) {
+    const newImage = document.createElement("img")
+    newImage.addEventListener("click", ramenClick)
+    newImage.src = ramen.image
+    ramenMenu.append(newImage);
+}
+
+// Click on an image from the `#ramen-menu` div and see all the info about that
+//   ramen displayed inside the `#ramen-detail` div and where it says
+//   `insert comment here` and `insert rating here`.
+
+function ramenClick(ramen) {
+    const ramenDetails = document.getElementById("ramen-detail")
+    const ramenImage = ramenDetails.querySelector("img")
+    ramenImage.src = ramen.image
+    const ramenName = ramenDetails.querySelector("h2")
+    ramenName.textContent = ramen.name
+    const ramenRestaurant = ramenDetails.querySelector("h3")
+    ramenRestaurant.textContent = ramen.restaurant 
+    const ramenRating = document.getElementById("rating-display")
+    ramenRating.textContent = ramen.rating
+    const ramenComment = document.getElementById("comment-display")
+    ramenRating.textContent = ramen.comment
+}
+
+// Create a new ramen after submitting the `new-ramen` form
+
+// The new ramen should be added to the`#ramen-menu` div
+
+// The new ramen does not need to persist; in other words, if you refresh the page, it's okay that the new ramen is no
+// longer on the page.
+
+
